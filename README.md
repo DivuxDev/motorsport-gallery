@@ -5,10 +5,11 @@ Galería de fotografía profesional de motocross y enduro. Aplicación web full-
 ## Stack tecnológico
 
 - **Frontend:** Next.js 16 (App Router), React 19, Tailwind CSS 4
-- **Backend:** Next.js API Routes, NextAuth.js (autenticación)
-- **Base de datos:** SQLite con Prisma ORM
+- **Backend:** Next.js API Routes, NextAuth.js v5 (autenticación)
+- **Base de datos:** SQLite con Prisma 5
 - **Procesamiento de imágenes:** Sharp (redimensionado, conversión a WebP)
 - **Tipografía:** Space Grotesk (headings) + Inter (body)
+- **Despliegue:** Docker (optimizado para Coolify)
 
 ## Características
 
@@ -35,7 +36,7 @@ Galería de fotografía profesional de motocross y enduro. Aplicación web full-
 - Las imágenes del slider se redimensionan a 1920px
 - Almacenamiento local en `/public/uploads/` y `/public/images/slider/`
 
-## Instalación
+## Instalación local
 
 ### Requisitos previos
 - Node.js 18+
@@ -53,45 +54,71 @@ npm install
 
 # 3. Configurar variables de entorno
 cp .env.example .env
-# Editar .env y cambiar NEXTAUTH_SECRET por un valor seguro
-```
 
-El archivo `.env` contiene:
-
-```
-DATABASE_URL="file:./dev.db"
-NEXTAUTH_SECRET="cambia-esto-por-un-secreto-seguro-en-produccion"
-NEXTAUTH_URL="http://localhost:3000"
-```
-
-```bash
-# 4. Crear la base de datos y generar el cliente Prisma
+# 4. Crear la base de datos
 npx prisma db push
 
 # 5. Crear el usuario administrador
 npm run seed
-```
 
-### Ejecutar en desarrollo
-
-```bash
+# 6. Arrancar
 npm run dev
 ```
 
 Abre http://localhost:3000
 
-### Ejecutar en producción
+El archivo `.env` contiene:
+
+```
+DATABASE_URL="file:./dev.db"
+AUTH_SECRET="un-secreto-seguro"
+```
+
+### Ejecutar en producción (sin Docker)
 
 ```bash
 npm run build
 npm start
 ```
 
+## Despliegue con Docker / Coolify
+
+El proyecto incluye un `Dockerfile` multi-stage optimizado para Coolify.
+
+### Variables de entorno en Coolify
+
+| Variable | Valor | Requerida |
+|----------|-------|-----------|
+| `DATABASE_URL` | `file:/app/data/prod.db` | Si (ya tiene default en Dockerfile) |
+| `AUTH_SECRET` | Un string aleatorio largo | Recomendada |
+
+`AUTH_TRUST_HOST` ya está configurado en el Dockerfile.
+
+### Volúmenes persistentes
+
+Configura estos volúmenes en Coolify para que los datos sobrevivan a los redeploys:
+
+| Volumen | Contenido |
+|---------|-----------|
+| `/app/data` | Base de datos SQLite |
+| `/app/public/uploads` | Fotos de álbumes (full + thumbs) |
+| `/app/public/images/slider` | Imágenes del hero slider |
+
+### Que ocurre al arrancar el container
+
+1. Se ejecuta `prisma db push` para crear/actualizar las tablas automáticamente
+2. Se crea el usuario admin si no existe (usuario: `admin`, contraseña: `admin`)
+3. Se inicia el servidor Next.js
+
+### Puerto
+
+El container expone el puerto `3000`.
+
 ## Acceso al panel de administración
 
-- **URL:** http://localhost:3000/login
-- **Email:** `admin@mxshots.com`
-- **Password:** `admin123`
+- **URL:** `/login`
+- **Usuario:** `admin`
+- **Contraseña:** `admin`
 
 > Cambia estas credenciales después del primer acceso.
 
@@ -100,44 +127,47 @@ npm start
 ```
 motorsport-gallery/
 ├── prisma/
-│   ├── schema.prisma      # Modelos: User, Album, Photo, SliderImage, SiteSetting
-│   ├── seed.ts             # Script para crear usuario admin
-│   └── dev.db              # Base de datos SQLite (se genera automáticamente)
+│   ├── schema.prisma        # Modelos: User, Album, Photo, SliderImage, SiteSetting
+│   ├── seed.ts              # Seed para desarrollo (npm run seed)
+│   └── seed-docker.js       # Seed automático en Docker
 ├── public/
 │   ├── images/
-│   │   ├── logo.jpg        # Logo del sitio
-│   │   └── slider/         # Imágenes del hero slider
+│   │   ├── logo.jpg         # Logo del sitio (también usado como favicon)
+│   │   └── slider/          # Imágenes del hero slider
 │   └── uploads/
-│       ├── full/           # Fotos a resolución completa
-│       └── thumbs/         # Thumbnails
+│       ├── full/            # Fotos a resolución completa
+│       └── thumbs/          # Thumbnails
 ├── src/
 │   ├── app/
-│   │   ├── page.tsx        # Homepage
-│   │   ├── layout.tsx      # Layout raíz (inyecta tema)
-│   │   ├── login/          # Página de login
-│   │   ├── album/[slug]/   # Página de álbum público
-│   │   ├── admin/          # Panel de administración
-│   │   │   ├── page.tsx    # Dashboard
-│   │   │   ├── albums/     # CRUD de álbumes
-│   │   │   ├── slider/     # Gestión del slider
-│   │   │   └── settings/   # Ajustes de la web
-│   │   └── api/            # API Routes
-│   │       ├── albums/     # CRUD álbumes
-│   │       ├── photos/     # Eliminar fotos
-│   │       ├── upload/     # Subir fotos
-│   │       ├── slider/     # CRUD slider
-│   │       ├── settings/   # Leer/actualizar ajustes
-│   │       └── auth/       # NextAuth
+│   │   ├── page.tsx         # Homepage
+│   │   ├── layout.tsx       # Layout raíz (inyecta tema dinámico)
+│   │   ├── login/           # Página de login
+│   │   ├── album/[slug]/    # Página de álbum público
+│   │   ├── admin/           # Panel de administración
+│   │   │   ├── page.tsx     # Dashboard
+│   │   │   ├── albums/      # CRUD de álbumes
+│   │   │   ├── slider/      # Gestión del slider
+│   │   │   └── settings/    # Ajustes de la web
+│   │   └── api/             # API Routes
+│   │       ├── albums/      # CRUD álbumes
+│   │       ├── photos/      # Eliminar fotos
+│   │       ├── upload/      # Subir fotos (Sharp -> WebP)
+│   │       ├── slider/      # CRUD slider
+│   │       ├── settings/    # Leer/actualizar ajustes
+│   │       └── auth/        # NextAuth v5
 │   ├── components/
-│   │   ├── Navbar.tsx      # Barra de navegación
-│   │   ├── Footer.tsx      # Pie de página con contacto
-│   │   ├── AlbumCard.tsx   # Tarjeta de álbum
-│   │   ├── HeroSlider.tsx  # Slider del hero
-│   │   └── Lightbox.tsx    # Visor de fotos fullscreen
+│   │   ├── Navbar.tsx       # Barra de navegación (nombre dinámico)
+│   │   ├── Footer.tsx       # Pie de página (contacto dinámico)
+│   │   ├── AlbumCard.tsx    # Tarjeta de álbum
+│   │   ├── HeroSlider.tsx   # Slider del hero (crossfade)
+│   │   └── Lightbox.tsx     # Visor de fotos fullscreen
 │   └── lib/
-│       ├── prisma.ts       # Cliente Prisma singleton
-│       ├── auth.ts         # Configuración NextAuth
-│       └── settings.ts     # Lectura/escritura de ajustes
+│       ├── prisma.ts        # Cliente Prisma singleton
+│       ├── auth.ts          # Configuración NextAuth v5
+│       └── settings.ts      # Lectura/escritura de ajustes del sitio
+├── Dockerfile               # Multi-stage build para Coolify
+├── docker-entrypoint.sh     # Script de arranque (DB + seed + server)
+└── .dockerignore
 ```
 
 ## Scripts disponibles
@@ -147,7 +177,7 @@ motorsport-gallery/
 | `npm run dev` | Servidor de desarrollo |
 | `npm run build` | Build de producción |
 | `npm start` | Servidor de producción |
-| `npm run seed` | Crear usuario administrador |
+| `npm run seed` | Crear usuario administrador (dev) |
 
 ## Licencia
 

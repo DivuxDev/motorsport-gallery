@@ -49,11 +49,12 @@ COPY --from=builder /app/.next/static ./.next/static
 # Copy public assets
 COPY --from=builder /app/public ./public
 
-# Copy Prisma schema + engine for runtime
+# Copy Prisma schema + engine + seed for runtime
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
+COPY --from=builder /app/node_modules/bcryptjs ./node_modules/bcryptjs
 
 # Copy entrypoint script
 COPY docker-entrypoint.sh /app/docker-entrypoint.sh

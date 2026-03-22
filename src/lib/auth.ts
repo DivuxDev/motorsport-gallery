@@ -4,6 +4,8 @@ import bcryptjs from "bcryptjs";
 import { prisma } from "./prisma";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || "motorsport-gallery-default-secret-change-me",
+  trustHost: true,
   providers: [
     Credentials({
       name: "credentials",
