@@ -2,6 +2,9 @@
 
 Galería de fotografía profesional de motocross y enduro. Aplicación web full-stack con panel de administración para gestionar álbumes, fotos, slider y personalización visual completa.
 
+<img width="1274" height="1129" alt="image" src="https://github.com/user-attachments/assets/e3d3d7c4-074d-4e9b-97a0-dba81a44e262" />
+
+
 ## Stack tecnológico
 
 - **Frontend:** Next.js 16 (App Router), React 19, Tailwind CSS 4
