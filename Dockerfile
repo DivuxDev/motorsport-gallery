@@ -23,7 +23,7 @@ RUN npx prisma generate
 # Create a temporary DB so Next.js can pre-render pages that call Prisma
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV DATABASE_URL="file:/app/prisma/build.db"
-RUN npx prisma db push --skip-generate --accept-data-loss 2>/dev/null || true
+RUN npx prisma db push --schema=/app/prisma/schema.prisma --skip-generate --accept-data-loss 2>/dev/null || true
 RUN npm run build
 RUN rm -f /app/prisma/build.db /app/prisma/build.db-journal
 
@@ -54,7 +54,11 @@ COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
 
-# Create all writable directories and set ownership BEFORE switching user
+# Copy entrypoint script
+COPY docker-entrypoint.sh /app/docker-entrypoint.sh
+RUN chmod +x /app/docker-entrypoint.sh
+
+# Create all writable directories and set ownership
 RUN mkdir -p /app/data /app/public/uploads/full /app/public/uploads/thumbs /app/public/images/slider && \
     chown -R nextjs:nodejs /app
 
@@ -67,5 +71,4 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-# On startup: create/migrate DB tables, then start the server
-CMD ["sh", "-c", "npx prisma db push --skip-generate 2>/dev/null; node server.js"]
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
