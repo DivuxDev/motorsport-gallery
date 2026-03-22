@@ -240,12 +240,12 @@ export default async function HomePage() {
           {/* Text */}
           <div className="order-1 md:order-2">
             <h3 className="text-mx-accent font-body font-black tracking-[0.4em] mb-6 uppercase text-sm">
-              THE VISION
+              LA VISIÓN
             </h3>
             <h2 className="font-heading text-6xl font-black uppercase tracking-tighter leading-none mb-8">
-              BEYOND THE
+              MÁS ALLÁ DE LA
               <br />
-              DUST CLOUD.
+              NUBE DE POLVO.
             </h2>
             <p className="text-mx-outline text-lg leading-relaxed mb-10 max-w-lg font-body">
               Cada piloto tiene una historia escrita en el barro. No solo
@@ -344,7 +344,7 @@ function TickerItems({
             d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
           />
         </svg>
-        {totalPhotos > 0 ? `${totalPhotos.toLocaleString()}+` : "HIGH-RES"} CAPTURES
+        {totalPhotos > 0 ? `${totalPhotos.toLocaleString()}+` : "HIGH-RES"} FOTOS
       </span>
       <span className="font-heading text-sm font-bold text-mx-outline tracking-widest uppercase">
         /
@@ -363,7 +363,7 @@ function TickerItems({
             d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
           />
         </svg>
-        {albumCount} ALBUMS — WORLDWIDE COVERAGE
+        {albumCount} ALBUMS 
       </span>
       <span className="font-heading text-sm font-bold text-mx-outline tracking-widest uppercase">
         /
