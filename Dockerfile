@@ -34,6 +34,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV DATABASE_URL="file:/app/data/prod.db"
+ENV AUTH_TRUST_HOST=true
 
 RUN apk add --no-cache openssl libc6-compat
 
