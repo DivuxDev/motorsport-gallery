@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
-import Image from "next/image";
+import UploadedImage from "@/components/UploadedImage";
 import { useRouter } from "next/navigation";
 
 interface SliderImage {
@@ -234,7 +234,7 @@ export default function SliderManager({
               }`}
             >
               {/* Image preview */}
-              <Image
+              <UploadedImage
                 src={image.url}
                 alt={image.filename}
                 fill

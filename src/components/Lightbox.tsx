@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect } from "react";
-import Image from "next/image";
+import UploadedImage from "@/components/UploadedImage";
 
 interface Photo {
   id: string;
@@ -86,7 +86,7 @@ export default function Lightbox({
 
       {/* Image */}
       <div className="relative max-w-[90vw] max-h-[90vh]">
-        <Image
+        <UploadedImage
           src={photo.fullUrl}
           alt={photo.filename}
           width={photo.width}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import UploadedImage from "@/components/UploadedImage";
 import Lightbox from "@/components/Lightbox";
 
 interface Photo {
@@ -35,7 +35,7 @@ export default function AlbumGallery({ photos }: { photos: Photo[] }) {
             className="group relative block w-full mb-1 overflow-hidden bg-mx-container animate-fade-up cursor-zoom-in break-inside-avoid"
             style={{ animationDelay: `${(i % PAGE_SIZE) * 30}ms` }}
           >
-            <Image
+            <UploadedImage
               src={photo.thumbUrl}
               alt={photo.filename}
               width={photo.width || 800}

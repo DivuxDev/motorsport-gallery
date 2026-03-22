@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import Image from "next/image";
+import UploadedImage from "@/components/UploadedImage";
 import DeleteAlbumButton from "./DeleteAlbumButton";
 
 export const dynamic = "force-dynamic";
@@ -67,7 +67,7 @@ export default async function AdminAlbumsPage() {
               <Link href={`/admin/albums/${album.id}`}>
                 <div className="aspect-video relative bg-mx-gray overflow-hidden">
                   {album.coverUrl ? (
-                    <Image
+                    <UploadedImage
                       src={album.coverUrl}
                       alt={album.title}
                       fill

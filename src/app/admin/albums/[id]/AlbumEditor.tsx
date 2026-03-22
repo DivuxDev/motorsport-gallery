@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+import UploadedImage from "@/components/UploadedImage";
 import Link from "next/link";
 
 interface Photo {
@@ -357,7 +357,7 @@ export default function AlbumEditor({ album }: { album: Album }) {
                   </div>
                 )}
 
-                <Image
+                <UploadedImage
                   src={photo.thumbUrl}
                   alt={photo.filename}
                   fill

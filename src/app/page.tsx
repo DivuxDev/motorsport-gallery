@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import Image from "next/image";
+import UploadedImage from "@/components/UploadedImage";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -149,7 +150,7 @@ export default async function HomePage() {
               >
                 {/* Image — grayscale by default, color on hover */}
                 {album.coverUrl ? (
-                  <Image
+                  <UploadedImage
                     src={album.coverUrl}
                     alt={album.title}
                     fill

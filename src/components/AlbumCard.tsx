@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import UploadedImage from "@/components/UploadedImage";
 
 interface AlbumCardProps {
   album: {
@@ -24,7 +24,7 @@ export default function AlbumCard({ album, index }: AlbumCardProps) {
       {/* Portrait aspect ratio */}
       <div className="aspect-[3/4] relative overflow-hidden bg-mx-black">
         {album.coverUrl ? (
-          <Image
+          <UploadedImage
             src={album.coverUrl}
             alt={album.title}
             fill

@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import Image from "next/image";
+import UploadedImage from "@/components/UploadedImage";
 
 export const dynamic = "force-dynamic";
 
@@ -147,7 +147,7 @@ export default async function AdminDashboard() {
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-mx-gray shrink-0 relative overflow-hidden">
                           {album.coverUrl ? (
-                            <Image
+                            <UploadedImage
                               src={album.coverUrl}
                               alt={album.title}
                               fill

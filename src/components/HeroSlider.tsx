@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import Image from "next/image";
+import UploadedImage from "@/components/UploadedImage";
 
 interface SliderImage {
   id: string;
@@ -46,7 +46,7 @@ export default function HeroSlider({ images }: { images: SliderImage[] }) {
             zIndex: i === active ? 1 : 0,
           }}
         >
-          <Image
+          <UploadedImage
             src={img.url}
             alt=""
             fill
