@@ -62,13 +62,10 @@ COPY --from=builder /app/node_modules/@img ./node_modules/@img
 COPY docker-entrypoint.sh /app/docker-entrypoint.sh
 RUN chmod +x /app/docker-entrypoint.sh
 
-# Create all writable directories and set ownership
-RUN mkdir -p /app/data /app/public/uploads/full /app/public/uploads/thumbs /app/public/images/slider && \
-    chown -R nextjs:nodejs /app
+# Create all writable directories
+RUN mkdir -p /app/data /app/public/uploads/full /app/public/uploads/thumbs /app/public/images/slider
 
 VOLUME ["/app/data", "/app/public/uploads", "/app/public/images/slider"]
-
-USER nextjs
 
 EXPOSE 3000
 
