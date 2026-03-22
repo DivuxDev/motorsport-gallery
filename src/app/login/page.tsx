@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -24,7 +24,7 @@ export default function LoginPage() {
     setError("");
 
     const res = await signIn("credentials", {
-      email,
+      username,
       password,
       redirect: false,
     });
@@ -101,21 +101,21 @@ export default function LoginPage() {
               </div>
             )}
 
-            {/* Email field */}
+            {/* Username field */}
             <div className="space-y-1.5 shutter-focus group">
               <label
-                htmlFor="email"
+                htmlFor="username"
                 className="block font-body text-[0.65rem] uppercase font-bold tracking-widest text-mx-outline group-focus-within:text-mx-accent transition-colors"
               >
-                Email de acceso
+                Usuario
               </label>
               <div className="relative">
                 <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="ADMIN@INSTINTOENDURO.COM"
+                  id="username"
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="admin"
                   required
                   className="w-full bg-mx-mid text-mx-light font-body text-sm py-4 px-4 focus:outline-none focus:ring-0 placeholder:text-mx-bright border-none"
                 />
